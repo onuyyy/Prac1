@@ -20,4 +20,10 @@ public class ReservationController {
         return ResponseEntity.ok("Reservation successful for " + reservation.getStoreName());
     }
 
+    @PostMapping("/check")
+    public ResponseEntity<String> checkReservation(@RequestBody ReservationDto reservation) {
+        return ResponseEntity.ok(reservationService.checkReservation(reservation));
+
+    }
+
 }

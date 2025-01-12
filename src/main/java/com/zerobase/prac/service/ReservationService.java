@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +24,31 @@ public class ReservationService {
                 .orElseThrow(() -> new RuntimeException("not found store"));
 
         if (reservationRepository.existsByReservationDate(dto.getReservationDate())) {
-            new RuntimeException("already reserved");
+            throw new RuntimeException("already reserved");
         }
 
         reservationRepository.save(Reservation.from(dto));
     }
 
 
+    public String checkReservation(ReservationDto dto) {
+
+        List<Reservation> reservations = reservationRepository.findByUserName(dto.getUserName());
+
+        Optional<Reservation> reservationOptional = reservations.stream()
+                .filter(reservation -> reservation.getReservationDate().equals(dto.getReservationDate()))
+                .findFirst();
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+
+            reservation.setComeCheck(true);
+            reservationRepository.save(reservation);
+
+            return dto.getUserName() + " reservation check completed";
+        } else {
+            throw new RuntimeException("not found reservation");
+        }
+
+    }
 }

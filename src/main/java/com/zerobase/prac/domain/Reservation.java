@@ -21,12 +21,14 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String userName;
     private LocalDateTime reservationDate;
     private String storeId;
     private boolean comeCheck;
 
     public static Reservation from(ReservationDto form) {
         return Reservation.builder()
+                .userName(form.getUserName())
                 .reservationDate(form.getReservationDate())
                 .storeId(form.getStoreName())
                 .build();

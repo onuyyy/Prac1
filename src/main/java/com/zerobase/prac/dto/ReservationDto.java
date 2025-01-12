@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ReservationDto {
 
+    private String userName;
     private LocalDateTime reservationDate;
     private String storeName;
     private boolean comeCheck;
